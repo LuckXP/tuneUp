@@ -15,8 +15,8 @@ router.use('/playlists', playlists)
 
 app.set('view engine', 'ejs');
 
-app.use('/', function(req, res){
-  res.render('index');
+app.get('*', function(req, res){
+  res.sendFile('./index.html'));
 })
 
 app.listen(port)
