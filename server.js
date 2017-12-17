@@ -13,8 +13,11 @@ app.use(bodyParser.json())
 app.use('/v1',router)
 router.use('/playlists', playlists)
 
+app.set('view engine', 'ejs');
 
-
+app.use('/', function(req, res){
+  res.render('index');
+})
 
 app.listen(port)
-console.log('hot takes on port ' + port)
+console.log('tuneUp on port ' + port)
