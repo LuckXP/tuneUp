@@ -1,21 +1,33 @@
-const express = require('express')
-const app = express()
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const router = express.Router()
-require('dotenv').config()
-const mongoose = require('mongoose')
-const port = process.env.PORT || 8080
-const playlists = require('./routes/playlists')
-const methodOverride = require('method-override')
-const session = require('express-session')
-const passport = require('passport')
-const SpotifyStrategy = require('passport-spotify').Strategy
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const router = express.Router();
+const port = process.env.PORT || 8080;
+require('dotenv').config();
+const mongoose = require('mongoose');
+const playlists = require('./routes/playlists');
+const methodOverride = require('method-override');
+const session = require('express-session');
+const passport = require('passport');
+const SpotifyStrategy = require('passport-spotify').Strategy;
 const appKey = process.env.SPOTIFY_CLIENT_ID;
 const appSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
-console.log('heeeeeeeeeeeeerrrrrrrrrrrrreeeeeeeeeeeee!#!#!#!#!#!##!#!',appKey,appSecret);
+app.set('port', (process.env.PORT || 8080));
+app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/public/views');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+
+app.get('*', function(req, res){
+    res.render('index.html');
+});
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -65,8 +77,6 @@ app.get('/auth/spotify',
 
 app.use('/v1',router)
 router.use('/playlists', playlists)
-
-app.set('view engine', 'ejs');
 
 app.get('/', function(req, res){
   res.render('index.html', { user: req.user });;
